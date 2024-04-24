@@ -10,3 +10,5 @@ I used the ESP32 as the reciever and an Arduino NANO as the transmitter and it s
 
 # Setting up the ESP32 transmitter code
 Since the ESP32 doesn't support the Servo module, we have to use the ESP32 Servo module to use the RC_ESC module to control any ESC we have. Then, we have to change the #include <Servo.h> in the RC_ESC module to #include <ESP32Servo.h> (or whatever the header file name is). Now you can upload and use the esp32 as a reciever.
+
+I have uploaded the edited code in the ESP32 Transmitter folder.
