@@ -1,4 +1,4 @@
-# ESP32LoRaRC
+# ESP32 LoRa RC
 Remote control using an ESP32 and a LoRa module.
 
 # Disclaimer! I am a complete beginner and this code might be really not optimized(or whatever the word for it is).
