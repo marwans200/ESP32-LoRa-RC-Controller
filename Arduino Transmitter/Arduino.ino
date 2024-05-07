@@ -1,20 +1,18 @@
 #include <SPI.h>
 #include <LoRa.h>
 
-//Defining Custom Pins, Change Accordingly
+//Custom Pins, Change Accordingly
 #define LORA_NSS   10
 #define LORA_RST   9
 #define LORA_DIO0  2
-
-//Defining Analog input Min and Max
-#define JoyXMax 180
+//Analog input Min and Max
+#define JoyXMax 60
 #define JoyXMin 0
 #define JoyYMax 180
 #define JoyYMin 0
-
 //My throttle is inverted. Change accordingly
-#define ThrottleMax 0
-#define ThrottleMin 180
+#define ThrottleMax 100
+#define ThrottleMin 0
 
 void setup() {
   Serial.begin(9600);
@@ -41,12 +39,13 @@ void loop() {
   int joyY = analogRead(A1);
   int throttle = analogRead(A2);
 
-  //Converting to String to send message via LoRa
-  String XtoPWM = String(map(joyX,0,1023,0,180));
-  String YtoPWM = String(map(joyY,0,1023,0,180));
-  String TtoPWM = String(map(throttle,0,1023,180,0));
+  String XtoPWM = String(map(joyX, 0, 900, JoyXMin, JoyXMax));
+  String YtoPWM = String(map(joyY,0,900,JoyYMin,JoyYMax));
+  int TtoPWM = map(throttle,0,900,ThrottleMin,ThrottleMax);
+  String TtoMS = String(map(TtoPWM,ThrottleMax,ThrottleMin,1000,2000));
 
-  String message = XtoPWM + ","+ YtoPWM + "," + TtoPWM;
+  String message = XtoPWM + ","+ YtoPWM + "," + TtoMS;
+  String analogVals = String(joyX) + ","+ String(joyY) + "," + String(throttle);
 
   //Debugging
   Serial.println(message);
@@ -59,4 +58,3 @@ void loop() {
   //Change or remove accordingly
   delay(50);
 }
-
