@@ -9,7 +9,7 @@
 #define LORA_DIO0   4
 
 //Define the max Servo rotation per message recieved. Scroll below to the split string code to know why.
-#define MaxRot 10
+#define MaxRot 8
 
 //Defining Servos and ESC
 Servo Servo1;
@@ -17,7 +17,7 @@ Servo Servo2;
 Servo Servo3;
 
 //Initializing the ESC
-ESC myESC(13,1000,2000,500);
+ESC myESC(13,1000,2000,900);
 
 //int array to store the positional value recieved from the transmitter
 int pos[3];
@@ -39,6 +39,7 @@ void setup() {
     Serial.println("LoRa Failed to Load!");
     while (1);
   }
+
 }
 
 void loop() {
@@ -53,17 +54,17 @@ void loop() {
 
     splitString(msg,pos);
 
-    
+    //Writing the position of the Servos... You can move it inside the if statement above to not waste cpu cycles or whatever idk
+    Servo1.write(pos[0]);
+    Servo2.write(pos[1]);
+    Servo3.write(pos[1]);
+
     Serial.println(msg);
+    
   }
-  //Writing the position of the Servos... You can move it inside the if statement above to not waste cpu cycles or whatever idk
-  Servo1.write(pos[0]);
-  Servo2.write(pos[1]);
-  Servo3.write(map(pos[1],0,180,180,0));
 
   //Writing ESC Speed... Same as above
-  myESC.speed(map(pos[2],0,180,1000,2000));
-
+  myESC.speed(pos[2]);
 }
 
 //A whole ass code for spliting string coz I don't actually know how to
@@ -97,9 +98,10 @@ void splitString(String input, int arr[]) {
       arr[i] -= MaxRot;
     }
     else{
-      arr[i] = substring.toInt();
+      arr[i] = vals;
     }
 
+    if(i == 2) arr[i] = vals;
     // Move the index past the comma
     commaIndex = nextCommaIndex + 1;
   }
